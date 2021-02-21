@@ -1,0 +1,12 @@
+---
+- name: jenkins | repo
+  get_url:
+    url: https://pkg.jenkins.io/redhat-stable/jenkins.repo
+    dest: /etc/yum.repos.d/jenkins.repo
+    mode: 0440
+
+- name: jenkins | repo key
+  shell: rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+  args:
+    warn: false
+

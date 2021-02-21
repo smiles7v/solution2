@@ -1,0 +1,19 @@
+---
+- name: install epel
+  yum:
+    name: epel-release
+
+- name: install jenkins
+  yum:
+    name: "{{item}}"
+    state: installed
+  with_items: "{{jenkins_pkg_dep}}"
+
+- name: restart jenkins
+  service:
+    name: jenkins
+    state: restarted
+
+- name: install python-jenkins
+  pip:
+   name: python-jenkins

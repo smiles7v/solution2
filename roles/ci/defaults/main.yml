@@ -1,0 +1,41 @@
+---
+jenkins_plugins:
+  - { name: 'git'}
+  - { name: 'workflow-api' }
+  - { name: 'workflow-job' }
+  - { name: 'workflow-cps' }
+  - { name: 'job-dsl-plugin' }
+  - { name: 'workflow-support' }
+  - { name: 'workflow-scm-step' }
+  - { name: 'workflow-step-api' }
+  - { name: 'pipeline-stage-view' }
+  - { name: 'pipeline-build-step' }
+  - { name: 'pipeline-stage-step' }
+  - { name: 'pipeline-input-step' }
+  - { name: 'workflow-basic-steps' }
+  - { name: 'workflow-multibranch' }
+  - { name: 'workflow-cps-global-lib' }
+  - { name: 'pipeline-milestone-step' }
+  - { name: 'pipeline-model-definition' }
+  - { name: 'workflow-durable-task-step' }
+
+jenkins_pkg_dep:
+  - 'git'
+  - 'jenkins'
+  - 'python-pip'
+  - 'libselinux-python'
+  - 'python-lxml.x86_64'
+  - 'java-1.8.0-openjdk.x86_64'
+
+jenkins_user_name: 'jenkins'
+jenkins_admin_name: 'vagrant'
+jenkins_job_name: 'equalexperts'
+jenkins_admin_password: 'vagrant'
+jenkins_home_dir: '/var/lib/jenkins'
+jenkins_url: 'http://localhost:8080'
+jenkins_git_repo: 'https://github.com/smiles7v/solution2.git'
+
+my_jenkins_params:
+  url: "{{jenkins_url}}"
+  url_username: "{{jenkins_admin_name}}"
+  url_password: "{{jenkins_admin_password}}"

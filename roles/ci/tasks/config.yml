@@ -1,0 +1,42 @@
+---
+- name: config | remove default account
+  shell: rm -rf {{item}}
+  with_items:
+    - "{{jenkins_home_dir}}/users/admin"
+    - "{{jenkins_home_dir}}/secrets/initialAdminPassword"
+
+- name: config | admin user dir
+  file:
+    path: "{{jenkins_home_dir}}/users/{{jenkins_admin_name}}"
+    state: directory
+    group: "{{jenkins_user_name}}"
+    owner: "{{jenkins_user_name}}"
+    mode: 0755
+
+- name: config | admin user config
+  template:
+    src: "{{jenkins_admin_name}}.xml.j2"
+    dest: "{{jenkins_home_dir}}/users/{{jenkins_admin_name}}/config.xml"
+    group: "{{jenkins_user_name}}"
+    owner: "{{jenkins_user_name}}"
+
+- name: wait-forjenkins
+  uri:
+    url: "{{jenkins_url}}"
+    method: GET
+    user: "{{jenkins_admin_name}}"
+    password: "{{jenkins_admin_password}}"
+    force_basic_auth: yes
+    status_code: 200
+  register: running
+  until: running.status == 200
+  retries: 30
+  delay: 15
+
+- name: config | disable setupwizard
+  copy:
+    src: "{{jenkins_home_dir}}/jenkins.install.UpgradeWizard.state"
+    dest: "{{jenkins_home_dir}}/jenkins.install.InstallUtil.lastExecVersion"
+    group: "{{jenkins_user_name}}"
+    owner: "{{jenkins_user_name}}"
+    remote_src: true

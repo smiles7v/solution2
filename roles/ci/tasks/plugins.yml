@@ -1,0 +1,27 @@
+---
+- name: config | get plugins
+  jenkins_plugin:
+    name: "{{item.name}}"
+    params: "{{my_jenkins_params}}"
+    timeout: 70
+    with_dependencies: yes
+  ignore_errors: true
+  with_items: "{{jenkins_plugins}}"
+
+- name: restart jenkins
+  service:
+    name: jenkins
+    state: restarted
+
+- name: wait-forjenkins
+  uri:
+    url: "{{jenkins_url}}"
+    method: GET
+    user: "{{jenkins_admin_name}}"
+    password: "{{jenkins_admin_password}}"
+    force_basic_auth: yes
+    status_code: 200
+  register: running
+  until: running.status == 200
+  retries: 30
+  delay: 15
